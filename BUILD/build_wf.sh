@@ -82,7 +82,7 @@ rm -rf $Dir/tmp/waterfox-$VERSION/waterfox/precomplete
 rm -rf $Dir/tmp/waterfox-$VERSION/waterfox/icons
 
 # Build .deb package (Requires devscripts to be installed sudo apt install devscripts). Arch and based Linux needs -d flag.
-notify-send "Building deb packages!"
+echo "Building deb packages!"
 debuild -us -uc -d
 
 if [ -f $Dir/tmp/waterfox_*_amd64.deb ]; then
@@ -92,5 +92,5 @@ else
    exit 1
 fi
 
-notify-send "Deb package for APT repository complete!"
+echo "Deb package for APT repository complete!"
 finalCleanUp
