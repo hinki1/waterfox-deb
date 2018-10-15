@@ -6,13 +6,6 @@ cd $Dir
 # Init vars
 VERSION=""
 
-function finalCleanUp(){
-    if [ -d "$Dir/tmp" ]; then
-        echo "Clean: $Dir/tmp"
-        rm -rf $Dir/tmp
-    fi
-}
-
 # Create folder where we move our created deb packages
 if [ ! -d "$Dir/debs" ]; then 
 mkdir $Dir/debs
@@ -22,9 +15,12 @@ fi
 if [ ! -d "$Dir/tmp/version" ]; then 
 mkdir -p $Dir/tmp/version
 cd $Dir/tmp/version
-wget https://raw.githubusercontent.com/MrAlex94/Waterfox/master/browser/config/version_display.txt
+#wget https://raw.githubusercontent.com/MrAlex94/Waterfox/master/browser/config/version_display.txt
+git -C ~/rechner/software/programme/browser/waterfox/github checkout 56.2.4
+ln -s ~/rechner/software/programme/browser/waterfox/github/browser/config/version_display.txt
 fi
 
+# -f is true for a symlink to an existing file
 if [ -f "$Dir/tmp/version/version_display.txt" ]; then
     VERSION=$(<$Dir/tmp/version/version_display.txt)
 else
@@ -93,4 +89,3 @@ else
 fi
 
 echo "Deb package for APT repository complete!"
-finalCleanUp
