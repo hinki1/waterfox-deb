@@ -1,6 +1,7 @@
-VERSION = $(shell cat tmp/version/version_display.txt)
+#VERSION = $(shell cat tmp/version/version_display.txt)
+VERSION = 56.2.3
 
-build-hinki: | tmp/version/version_display.txt
+build-hinki: #| tmp/version/version_display.txt
 	$(MAKE) tmp/waterfox-$(VERSION)
 	$(MAKE) tmp/waterfox-$(VERSION)/debian
 	$(MAKE) download
@@ -9,15 +10,15 @@ build-hinki: | tmp/version/version_display.txt
 	$(MAKE) tmp/waterfox-$(VERSION)/debian/changelog
 	$(MAKE) debs/waterfox_$(VERSION)_amd64.deb
 
-tmp/version:
-	@mkdir -p tmp/version
+#tmp/version:
+#	@mkdir -p tmp/version
 
-tmp/version/version_display.txt: | tmp/version
-	@cd tmp/version && \
-	 ln -s ../../../../github/browser/config/version_display.txt
+#tmp/version/version_display.txt: | tmp/version
+#	@cd tmp/version && \
+#	 ln -s ../../../../github/browser/config/version_display.txt
 
 # geht erst, wenn version_display.txt existiert
-tmp/waterfox-$(VERSION): | tmp/version/version_display.txt
+tmp/waterfox-$(VERSION): #| tmp/version/version_display.txt
 	mkdir -p $@
 
 tmp/waterfox-$(VERSION)/debian: | waterfox/debian tmp/waterfox-$(VERSION)
@@ -28,6 +29,7 @@ tmp/waterfox-$(VERSION)/waterfox-$(VERSION).en-US.linux-x86_64.tar.bz2:
 	@cd $(dir $@) && \
 	 wget -N "https://storage-waterfox.netdna-ssl.com/releases/linux64/installer/$(notdir $@)"
 
+# unpack
 tmp/waterfox-$(VERSION)/waterfox: | tmp/waterfox-$(VERSION)/waterfox-$(VERSION).en-US.linux-x86_64.tar.bz2
 	@cd $(dir $@) && \
 	 tar xaf waterfox-$(VERSION).en-US.linux-x86_64.tar.bz2
@@ -68,7 +70,7 @@ build:
 	./build_wf.sh
 
 clean:
-	rm -rf ./tmp/version
+#	rm -rf ./tmp/version
 	rm -rf ./tmp/waterfox-$(VERSION)/waterfox
 	rm -rf ./tmp/waterfox-$(VERSION)/debian
 	rm -rf ./tmp/waterfox-$(VERSION)/features
