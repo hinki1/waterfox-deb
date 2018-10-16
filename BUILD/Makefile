@@ -7,7 +7,7 @@ build-hinki: | tmp/version/version_display.txt
 	$(MAKE) tmp/waterfox-$(VERSION)/waterfox
 	$(MAKE) tmp/waterfox-$(VERSION)/features
 	$(MAKE) tmp/waterfox-$(VERSION)/debian/changelog
-	$(MAKE) debs/waterfox_56.2.3_amd64.deb
+	$(MAKE) debs/waterfox_$(VERSION)_amd64.deb
 
 tmp/version:
 	@mkdir -p tmp/version
@@ -53,21 +53,22 @@ tmp/waterfox-$(VERSION)/debian/changelog: | tmp/waterfox-$(VERSION)/debian
 	@rm -rf tmp/waterfox-$(VERSION)/waterfox/icons
 
 # Build .deb package (Requires devscripts to be installed sudo apt install devscripts). Arch and based Linux needs -d flag.
-debuild: tmp/waterfox_56.2.3_amd64.deb
-tmp/waterfox_56.2.3_amd64.deb: tmp/waterfox-$(VERSION)/debian/changelog
+debuild: tmp/waterfox_$(VERSION)_amd64.deb
+tmp/waterfox_$(VERSION)_amd64.deb: tmp/waterfox-$(VERSION)/debian/changelog
 	@cd tmp/waterfox-$(VERSION) && \
 	 debuild -us -uc -d
 
 debs:
 	@mkdir -p debs
 
-debs/waterfox_56.2.3_amd64.deb: tmp/waterfox_56.2.3_amd64.deb | debs
-	@cp tmp/waterfox_56.2.3_amd64.deb debs
+debs/waterfox_$(VERSION)_amd64.deb: tmp/waterfox_$(VERSION)_amd64.deb | debs
+	@cp tmp/waterfox_$(VERSION)_amd64.deb debs
 
 build:
 	./build_wf.sh
 
 clean:
+	rm -rf ./tmp/version
 	rm -rf ./tmp/waterfox-$(VERSION)/waterfox
 	rm -rf ./tmp/waterfox-$(VERSION)/debian
 	rm -rf ./tmp/waterfox-$(VERSION)/features
