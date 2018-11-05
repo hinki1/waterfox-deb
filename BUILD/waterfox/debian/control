@@ -1,7 +1,7 @@
 Source: waterfox
 Section: web
 Priority: optional
-Maintainer: hawkeye116477 <hawkeye116477@gmail.com>
+Maintainer: Matthias Hinkfoth <hinki@abwesend.de>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.7
 Homepage: https://www.waterfoxproject.org/

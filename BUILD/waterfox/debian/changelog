@@ -2,5 +2,4 @@ waterfox (__VERSION__) stretch; urgency=high
 
     * built for debian stable
     
-    
  -- Matthias Hinkfoth <hinki@abwesend.de>  __TIMESTAMP__
