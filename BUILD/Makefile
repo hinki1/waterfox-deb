@@ -1,33 +1,34 @@
 VERSION = $(shell cat tmp/version/version_display.txt)
-#VERSION = 56.2.4
 
-build-hinki: #| tmp/version/version_display.txt
-	$(MAKE) tmp/waterfox-$(VERSION)
-	$(MAKE) tmp/waterfox-$(VERSION)/debian
-#	$(MAKE) tmp/waterfox-$(VERSION)/waterfox
-	$(MAKE) copy
-	$(MAKE) tmp/waterfox-$(VERSION)/features
-	$(MAKE) tmp/waterfox-$(VERSION)/debian/changelog
-	$(MAKE) debs/waterfox_$(VERSION)_amd64.deb
+build-hinki: \
+	tmp/waterfox-$(VERSION)/features \
+	tmp/waterfox-$(VERSION)/debian/changelog \
+	debs/waterfox_$(VERSION)_amd64.deb \
+  | tmp/version/version_display.txt
 
-#tmp/version:
-#	@mkdir -p tmp/version
+# depend to re-evaluate.
+# not the first target.
+Makefile: tmp/version/version_display.txt
 
-#tmp/version/version_display.txt: | tmp/version
-#	@cd tmp/version && \
-#	 ln -s ../../../../github/browser/config/version_display.txt
+tmp/version/version_display.txt: | tmp/version
+	@cd tmp/version && \
+	 ln -s ../../../../github/browser/config/version_display.txt
+
+tmp/version:
+	@mkdir -p tmp/version
 
 # geht erst, wenn version_display.txt existiert
-tmp/waterfox-$(VERSION): #| tmp/version/version_display.txt
+tmp/waterfox-$(VERSION): | tmp/version/version_display.txt
 	mkdir -p $@
 
 tmp/waterfox-$(VERSION)/debian: | waterfox/debian tmp/waterfox-$(VERSION)
 	cp -r waterfox/debian $(dir $@)
 
-copy:
+tmp/waterfox-$(VERSION)/waterfox: ../../github/objdir/dist/bin | tmp/waterfox-$(VERSION)
+	@rm -rf $@
 	@cp -rL ../../github/objdir/dist/bin tmp/waterfox-$(VERSION)/waterfox
 
-tmp/waterfox-$(VERSION)/features:
+tmp/waterfox-$(VERSION)/features: | tmp/waterfox-$(VERSION)/waterfox
 	@mv tmp/waterfox-$(VERSION)/waterfox/browser/features/ tmp/waterfox-$(VERSION)
 
 .PHONY: tmp/waterfox-$(VERSION)/debian/changelog
@@ -49,7 +50,7 @@ tmp/waterfox-$(VERSION)/debian/changelog: | tmp/waterfox-$(VERSION)/debian
 
 # Build .deb package (Requires devscripts to be installed sudo apt install devscripts). Arch and based Linux needs -d flag.
 debuild: tmp/waterfox_$(VERSION)_amd64.deb
-tmp/waterfox_$(VERSION)_amd64.deb: tmp/waterfox-$(VERSION)/debian/changelog
+tmp/waterfox_$(VERSION)_amd64.deb: tmp/waterfox-$(VERSION)/debian/changelog | tmp/waterfox-$(VERSION)/waterfox tmp/waterfox-$(VERSION)/features
 	@cd tmp/waterfox-$(VERSION) && \
 	 debuild -us -uc -d
 
@@ -62,11 +63,8 @@ debs/waterfox_$(VERSION)_amd64.deb: tmp/waterfox_$(VERSION)_amd64.deb | debs
 install:
 	@sudo dpkg -i debs/waterfox_$(VERSION)_amd64.deb
 
-build:
-	./build_wf.sh
-
 clean:
-#	rm -rf ./tmp/version
+	rm -rf ./tmp/version
 	rm -rf ./tmp/waterfox-$(VERSION)/waterfox
 	rm -rf ./tmp/waterfox-$(VERSION)/debian
 	rm -rf ./tmp/waterfox-$(VERSION)/features
