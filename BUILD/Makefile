@@ -1,4 +1,5 @@
 VERSION = $(shell cat tmp/version/version_display.txt)
+github-dir := ../../github
 
 build-hinki: \
 	tmp/waterfox-$(VERSION)/features \
@@ -12,7 +13,7 @@ Makefile: tmp/version/version_display.txt
 
 tmp/version/version_display.txt: | tmp/version
 	@cd tmp/version && \
-	 ln -s ../../../../github/browser/config/version_display.txt
+	 ln -s ../../$(github-dir)/browser/config/version_display.txt
 
 tmp/version:
 	@mkdir -p tmp/version
@@ -24,9 +25,9 @@ tmp/waterfox-$(VERSION): | tmp/version/version_display.txt
 tmp/waterfox-$(VERSION)/debian: | waterfox/debian tmp/waterfox-$(VERSION)
 	cp -r waterfox/debian $(dir $@)
 
-tmp/waterfox-$(VERSION)/waterfox: ../../github/objdir/dist/bin | tmp/waterfox-$(VERSION)
+tmp/waterfox-$(VERSION)/waterfox: $(github-dir)/objdir/dist/bin | tmp/waterfox-$(VERSION)
 	@rm -rf $@
-	@cp -rL ../../github/objdir/dist/bin tmp/waterfox-$(VERSION)/waterfox
+	@cp -rL $(github-dir)/objdir/dist/bin tmp/waterfox-$(VERSION)/waterfox
 
 tmp/waterfox-$(VERSION)/features: | tmp/waterfox-$(VERSION)/waterfox
 	@mv tmp/waterfox-$(VERSION)/waterfox/browser/features/ tmp/waterfox-$(VERSION)
