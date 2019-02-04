@@ -1,5 +1,5 @@
 VERSION = $(shell cat tmp/version/version_display.txt)
-github-dir := ../../github
+github-dir := ../github
 
 build-hinki: \
 	tmp/waterfox-$(VERSION)/features \
@@ -22,8 +22,8 @@ tmp/version:
 tmp/waterfox-$(VERSION): | tmp/version/version_display.txt
 	mkdir -p $@
 
-tmp/waterfox-$(VERSION)/debian: | ../waterfox tmp/waterfox-$(VERSION)
-	cp -r ../waterfox $@
+tmp/waterfox-$(VERSION)/debian: | waterfox tmp/waterfox-$(VERSION)
+	cp -r waterfox $@
 
 tmp/waterfox-$(VERSION)/waterfox: $(github-dir)/objdir/dist/bin | tmp/waterfox-$(VERSION)
 	@rm -rf $@
