@@ -1,4 +1,5 @@
-VERSION = $(shell cat tmp/version/version_display.txt)
+#VERSION = $(shell cat tmp/version/version_display.txt)
+VERSION = $(eval VERSION := $(shell cat tmp/version/version_display.txt))$(VERSION)
 github-dir := ../github
 
 build-hinki: \
