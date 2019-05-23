@@ -63,6 +63,7 @@ debs/waterfox_$(VERSION)_amd64.deb: tmp/waterfox_$(VERSION)_amd64.deb | debs
 	@cp tmp/waterfox_$(VERSION)_amd64.deb debs
 
 install:
+	@echo 'installing "waterfox_$(VERSION)_amd64.deb"'
 	@sudo dpkg -i debs/waterfox_$(VERSION)_amd64.deb
 
 clean:
