@@ -1,6 +1,5 @@
-/tmp/version/version_display.txt
-/tmp/waterfox-56.2.*/
-/tmp/waterfox_56.2.*
-/tmp/waterfox-dbgsym_56.2.*_amd64.deb
+/tmp/waterfox-*/
+/tmp/waterfox_*
+/tmp/waterfox-dbgsym_*_amd64.deb
 
 /debs/
