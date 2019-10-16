@@ -1,26 +1,12 @@
-#VERSION = $(shell cat tmp/version/version_display.txt)
-VERSION = $(eval VERSION := $(shell cat tmp/version/version_display.txt))$(VERSION)
 github-dir := ../github
+VERSION = $(eval VERSION := $(shell cat $(github-dir)/browser/config/version_display.txt))$(VERSION)
 
 build-hinki: \
 	tmp/waterfox-$(VERSION)/features \
 	tmp/waterfox-$(VERSION)/debian/changelog \
-	debs/waterfox_$(VERSION)_amd64.deb \
-  | tmp/version/version_display.txt
+	debs/waterfox_$(VERSION)_amd64.deb
 
-# depend to re-evaluate.
-# not the first target.
-Makefile: tmp/version/version_display.txt
-
-tmp/version/version_display.txt: | tmp/version
-	@cd tmp/version && \
-	 ln -s ../../$(github-dir)/browser/config/version_display.txt
-
-tmp/version:
-	@mkdir -p tmp/version
-
-# geht erst, wenn version_display.txt existiert
-tmp/waterfox-$(VERSION): | tmp/version/version_display.txt
+tmp/waterfox-$(VERSION):
 	mkdir -p $@
 
 tmp/waterfox-$(VERSION)/debian: | waterfox tmp/waterfox-$(VERSION)
