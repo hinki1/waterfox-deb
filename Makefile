@@ -12,9 +12,9 @@ tmp/waterfox-$(VERSION):
 tmp/waterfox-$(VERSION)/debian: | waterfox tmp/waterfox-$(VERSION)
 	cp -r waterfox $@
 
-tmp/waterfox-$(VERSION)/waterfox: $(github-dir)/objdir/dist/bin | tmp/waterfox-$(VERSION)
+tmp/waterfox-$(VERSION)/waterfox: $(github-dir)/objdir-classic/dist/bin | tmp/waterfox-$(VERSION)
 	@rm -rf $@
-	@cp -rL $(github-dir)/objdir/dist/bin tmp/waterfox-$(VERSION)/waterfox
+	@cp -rL $< $|/waterfox
 
 tmp/waterfox-$(VERSION)/features: | tmp/waterfox-$(VERSION)/waterfox
 	@mv tmp/waterfox-$(VERSION)/waterfox/browser/features/ tmp/waterfox-$(VERSION)
